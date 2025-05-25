@@ -5,64 +5,23 @@ using System.Threading.Tasks;
 
 namespace digitalArsv1.Repositories
 {
-    public class UsuarioRepository : IUsuarioRepository
+    public class UsuarioRepository : Repository<Usuario>, IUsuarioRepository
     {
-        private readonly DigitalArsContext _context;
-
-        public UsuarioRepository(DigitalArsContext context)
+        public UsuarioRepository(DigitalArsContext context) : base(context)
         {
-            _context = context;
         }
 
-        // Métodos del IRepository
-        public IQueryable<Usuario> Query() => _context.Usuarios;
-
-        public async Task<IEnumerable<Usuario>> GetAllAsync()
+        public async Task<List<Usuario>> ObtenerUsuariosSinCuentaAsync()
         {
-            return await _context.Usuarios.ToListAsync();
+            return await _context.Usuarios
+                .Where(u => !_context.Cuentas.Any(c => c.nro_cliente == u.nro_cliente))
+                .ToListAsync();
         }
 
-        public async Task<Usuario?> GetByIdAsync(int id)
+        public async Task EliminarUsuariosAsync(List<Usuario> usuarios)
         {
-            return await _context.Usuarios.FindAsync(id);
-        }
-
-        public async Task AddAsync(Usuario usuario)
-        {
-            await _context.Usuarios.AddAsync(usuario);
+            _context.Usuarios.RemoveRange(usuarios);
             await _context.SaveChangesAsync();
-        }
-
-        public void Update(Usuario usuario)
-        {
-            _context.Usuarios.Update(usuario);
-        }
-
-        public void Delete(Usuario usuario)
-        {
-            _context.Usuarios.Remove(usuario);
-        }
-
-        public async Task SaveAsync()
-        {
-            await _context.SaveChangesAsync();
-        }
-
-        // Acá definís el método que usa Update + SaveAsync
-        public async Task UpdateAsync(Usuario usuario)
-        {
-            Update(usuario);
-            await SaveAsync();
-        }
-
-        // Similar para DeleteAsync por id
-        public async Task DeleteAsync(int id)
-        {
-            var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario == null) return;
-
-            Delete(usuario);
-            await SaveAsync();
         }
     }
 }

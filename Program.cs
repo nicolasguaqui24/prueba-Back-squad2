@@ -1,31 +1,83 @@
 using Microsoft.EntityFrameworkCore;
-using digitalArsv1;
-using digitalArsv1.Repositories; 
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.OpenApi.Models;
+using digitalArsv1;
+using digitalArsv1.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// explorador de endpoints y Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "DigitalArs API", Version = "v1" });
 
-// DbContext
+    // Configuración de seguridad para JWT
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Ingrese el token JWT como: Bearer {su token}"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
+
+// Configura el DbContext
 builder.Services.AddDbContext<DigitalArsContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DigitalArsConnection")));
 
-// JSON configuración
+// Configura la serialización JSON
 builder.Services.AddControllers()
     .AddJsonOptions(x =>
-        x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve
-    );
+        x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
-// Registro de repositorios 
+// Registro de repositorios
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<ICuentaRepository, CuentaRepository>();
 builder.Services.AddScoped<IMovimientoRepository, MovimientoRepository>();
 builder.Services.AddScoped<ITransaccionRepository, TransaccionRepository>();
+builder.Services.AddScoped<IPermisoRepository, PermisoRepository>();
+
+// **Configuración de Autenticación JWT:**
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+    });
 
 var app = builder.Build();
+
+// Middleware pipeline
 
 if (app.Environment.IsDevelopment())
 {
@@ -34,6 +86,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();  // <- Esto debe ir antes que UseAuthorization
 app.UseAuthorization();
+
 app.MapControllers();
+
 app.Run();

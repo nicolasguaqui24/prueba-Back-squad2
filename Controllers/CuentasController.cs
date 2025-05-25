@@ -21,7 +21,13 @@ public class CuentasController : ControllerBase
         var cuentas = await _cuentaRepository.GetAllWithUsuarioAsync();
         return Ok(cuentas);
     }
-
+    // Metodo GET para obtener saldo de una cuenta 
+    [HttpGet("{nroCuenta}/saldo")]
+    public async Task<ActionResult<decimal>> ObtenerSaldo(int nroCuenta)
+    {
+        var saldo = await _cuentaRepository.ObtenerSaldoAsync(nroCuenta);
+        return Ok(saldo);
+    }
     [HttpGet("{id}")]
     public async Task<ActionResult<Cuenta>> GetCuenta(int id)
     {
@@ -31,7 +37,7 @@ public class CuentasController : ControllerBase
 
         return Ok(cuenta);
     }
-
+/*
     [HttpPost]
     public async Task<ActionResult<Cuenta>> PostCuenta(Cuenta cuenta)
     {
@@ -65,4 +71,4 @@ public class CuentasController : ControllerBase
 
         return NoContent();
     }
-}
+*/}

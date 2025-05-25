@@ -15,7 +15,7 @@ namespace digitalArsv1.Models
         public int? nro_cuenta_dest { get; set; }
         public int? codigo_transaccion { get; set; }
 
-        // Navegación
+       
         [ForeignKey("nro_cuenta_orig")]
         public Cuenta CuentaOrig { get; set; }
 

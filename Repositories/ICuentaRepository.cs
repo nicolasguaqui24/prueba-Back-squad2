@@ -9,5 +9,6 @@ namespace digitalArsv1.Repositories
         // Métodos específicos para Cuenta 
         Task<IEnumerable<Cuenta>> GetAllWithUsuarioAsync();
         Task<Cuenta> GetByIdWithUsuarioAsync(int id);
+        Task<decimal> ObtenerSaldoAsync(int nroCuenta);
     }
 }

@@ -15,6 +15,7 @@ namespace digitalArsv1.Repositories
             _context = context;
         }
 
+        // Método para traer todos los movimientos 
         public async Task<IEnumerable<Movimiento>> GetAllWithRelationsAsync()
         {
             return await _context.Movimientos

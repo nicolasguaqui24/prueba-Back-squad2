@@ -11,10 +11,13 @@ public class Usuario
     public string direccion { get; set; }
     public string mail { get; set; }
     public bool estado { get; set; }
+    public string tipo_cliente { get; set; }
     public string telefono { get; set; }
 
     // Relación 1:N con Cuenta
     public ICollection<Cuenta> Cuentas { get; set; } = new List<Cuenta>();
 
-    
+    public ICollection<Permiso> Permisos { get; set; } = new List<Permiso>();
+
+
 }

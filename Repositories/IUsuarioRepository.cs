@@ -6,8 +6,7 @@ namespace digitalArsv1.Repositories
 {
     public interface IUsuarioRepository : IRepository<Usuario>
     {
-        Task UpdateAsync(Usuario usuario);
-        Task DeleteAsync(int id);
-       
+        Task<List<Usuario>> ObtenerUsuariosSinCuentaAsync();
+        Task EliminarUsuariosAsync(List<Usuario> usuarios);
     }
 }

@@ -178,3 +178,5 @@ D:\Users\Usuario\Documents\digitalArs\digitalArsv1\digitalArsv1\obj\Debug\net8.0
 D:\Users\Usuario\Documents\digitalArs\digitalArsv1\digitalArsv1\obj\Debug\net8.0\digitalArsv1.genruntimeconfig.cache
 D:\Users\Usuario\Documents\digitalArs\digitalArsv1\digitalArsv1\obj\Debug\net8.0\ref\digitalArsv1.dll
 D:\Users\Usuario\Documents\digitalArs\digitalArsv1\digitalArsv1\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+D:\Users\Usuario\Documents\digitalArs\digitalArsv1\digitalArsv1\obj\Debug\net8.0\digitalArsv1.sourcelink.json
+D:\Users\Usuario\Documents\digitalArs\digitalArsv1\digitalArsv1\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

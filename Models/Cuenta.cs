@@ -13,7 +13,7 @@ namespace digitalArsv1.Models
         public int nro_cliente { get; set; }
         public string? rol_cta { get; set; }
 
-        // Relación con Usuario (NroCliente)
+        // Relación con Usuario (nro_cliente)
         [ForeignKey("nro_cliente")]
         public Usuario? Usuario { get; set; }
 
