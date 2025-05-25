@@ -22,7 +22,7 @@ public class UsuariosController : ControllerBase
         return Ok(usuarios);
     }
 
-    [HttpGet("{id}")]//METODO GET por id
+     [HttpGet("{id}")]//METODO GET por id
     public async Task<ActionResult<Usuario>> GetUsuario(int id)
     {
         var usuario = await _usuarioRepository.GetByIdAsync(id);
@@ -31,7 +31,7 @@ public class UsuariosController : ControllerBase
 
         return Ok(usuario);
     }
-
+    
     [HttpPost]//METODO POST
     public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
     {
@@ -39,7 +39,7 @@ public class UsuariosController : ControllerBase
         return CreatedAtAction(nameof(GetUsuario), new { id = usuario.nro_cliente }, usuario);
     }
 
-    [HttpPut("{id}")]
+   /* [HttpPut("{id}")]
     public async Task<IActionResult> PutUsuario(int id, Usuario usuario)
     {
         if (id != usuario.nro_cliente)
@@ -63,4 +63,5 @@ public class UsuariosController : ControllerBase
 
         return NoContent();
     }
+    */
 }

@@ -15,7 +15,7 @@ public class MovimientosController : ControllerBase
     {
         _movimientoRepository = movimientoRepository;
     }
-    [HttpGet]
+   /* [HttpGet]
     public async Task<ActionResult<IEnumerable<Movimiento>>> GetMovimientos()
     {
         var movimientos = await _movimientoRepository.GetAllWithRelationsAsync();
@@ -72,4 +72,4 @@ public class MovimientosController : ControllerBase
 
         return NoContent();
     }
-}
+*/}

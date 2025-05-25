@@ -11,6 +11,8 @@ namespace digitalArsv1
         public DbSet<Movimiento> Movimientos { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Transaccion> Transacciones { get; set; }
+        public DbSet<Permiso> Permisos { get; set; }//Agregado para la entidad permiso
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -86,6 +88,20 @@ namespace digitalArsv1
                       .HasForeignKey(m => m.codigo_transaccion)
                       .OnDelete(DeleteBehavior.Restrict);
             });
+            // PERMISO
+            modelBuilder.Entity<Permiso>(entity =>
+                {
+                    entity.ToTable("Permisos");
+                    entity.HasKey(p => new { p.nro_usuario, p.acceso }); // Clave compuesta
+                    entity.Property(p => p.nro_usuario).HasColumnName("nro_usuario");
+                    entity.Property(p => p.acceso).HasColumnName("acceso");
+
+                    entity.HasOne(p => p.Usuario)
+                          .WithMany(u => u.Permisos)
+                          .HasForeignKey(p => p.nro_usuario)
+                          .OnDelete(DeleteBehavior.Cascade);
+                });
+
         } 
 
     }  
