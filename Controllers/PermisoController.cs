@@ -1,12 +1,14 @@
 ﻿using digitalArsv1.Models;
 using digitalArsv1.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing;
 using System.Threading.Tasks;
 
 namespace digitalArsv1.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Tags("Permiso (SOLO ADMINISTRADOR)")]
     public class PermisoController : ControllerBase
     {
         private readonly IPermisoRepository _permisoRepository;
@@ -16,22 +18,24 @@ namespace digitalArsv1.Controllers
             _permisoRepository = permisoRepository;
         }
 
-        [HttpGet("{nroUsuario}/tiene-permiso/{acceso}")]
+        [HttpGet("{nroUsuario}/tiene-permiso/{acceso}")]// Consulta si usuario (nroUsuario) tiene un permiso específico.(Retorna true o false)
+
+
         public async Task<ActionResult<bool>> TienePermiso(int nroUsuario, string acceso)
         {
             bool tienePermiso = await _permisoRepository.ExistePermisoAsync(nroUsuario, acceso);
             return Ok(tienePermiso);
         }
-        // GET: VER PERMISO PARA NRO USUARIO
-        [HttpGet("{nroUsuario}")]
+       
+        [HttpGet("{nroUsuario}")] // Obtiene todos los permisos que tiene un usuario identificado por nroUsuario
         public async Task<ActionResult<IEnumerable<Permiso>>> GetPermisosByUsuario(int nroUsuario)
         {
             var permisos = await _permisoRepository.GetPermisosByUsuarioAsync(nroUsuario);
             return Ok(permisos);
         }
-        // POST: api/permiso
-            [HttpPost]
-            public async Task<ActionResult> CrearPermiso([FromBody] Permiso permiso)
+        
+            [HttpPost]   // Crea un nuevo permiso para un usuario
+        public async Task<ActionResult> CrearPermiso([FromBody] Permiso permiso)
             {
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState); // devuelve los errores de validación
@@ -42,9 +46,7 @@ namespace digitalArsv1.Controllers
             }
 
         
-
-        // DELETE: api/permiso/5/admin
-        [HttpDelete("{nroUsuario}/{acceso}")]
+        [HttpDelete("{nroUsuario}/{acceso}")]    // Crea un nuevo permiso para un usuario
         public async Task<ActionResult> EliminarPermiso(int nroUsuario, string acceso)
         {
             var permisos = await _permisoRepository.GetPermisosByUsuarioAsync(nroUsuario);

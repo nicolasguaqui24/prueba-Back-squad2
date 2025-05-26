@@ -13,7 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "DigitalArs API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "BILLETERA VIRTUAL- DigitalArs",
+        Version = "v1",
+        Description = "Gestión de usuarios, cuentas, movimientos, permisos " });
 
     // Configuración de seguridad para JWT
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -23,7 +25,7 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Ingrese el token JWT como: Bearer {su token}"
+        Description = "Ingrese el token "
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement

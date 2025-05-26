@@ -14,6 +14,7 @@ namespace digitalArsv1.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Tags("Metodo con autenticacion.(SOLO ADMINISTRADOR)")]
     public class AuthController : ControllerBase
     {
         private readonly IUsuarioRepository _usuarioRepository;
@@ -28,6 +29,7 @@ namespace digitalArsv1.Controllers
         }
 
         [HttpPost("login")]
+
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             // 1. Buscar usuario por nro_cliente
@@ -41,11 +43,11 @@ namespace digitalArsv1.Controllers
                 // Verificar si tiene permiso 'ADMINISTRADOR' en tabla Permisos
                 bool tienePermiso = await _permisoRepository.ExistePermisoAsync(request.nro_usuario, "ADMINISTRADOR");
                 if (!tienePermiso)
-                    return Unauthorized(new { mensaje = "Permiso administrador no concedido" });
+                    return Unauthorized(new { mensaje = "No tiene permiso ADMINISTRADOR" });
             }
             else if (usuario.tipo_cliente != "BILLETERA")
             {
-                // Sólo permiten BILLETERA o ADMINISTRADOR
+                // Sólo permiten BILLETERA o ADMINISTRADOR, es decir si no es administrador sera BILLETERA
                 return Unauthorized(new { mensaje = "Tipo de cliente no autorizado" });
             }
 
@@ -56,7 +58,7 @@ namespace digitalArsv1.Controllers
             return Ok(new
             {
                 token,
-                mensaje = "Inicio de sesión exitoso",
+                mensaje = "Inicio de sesión ADMINISTRADOR exitoso",
                 tipo_cliente = usuario.tipo_cliente
             });
         }
@@ -83,20 +85,21 @@ namespace digitalArsv1.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
         [Authorize(Roles = "ADMINISTRADOR")]
-        [HttpDelete("eliminar-usuarios-sin-cuenta")]
-        public async Task<IActionResult> EliminarUsuariosSinCuenta()
+        //Metodo PUT, para modificar estado de Usuario (0-1). Solo con autenticacion(token)
+        [HttpPut("desactivar-usuarios-sin-cuenta")]
+        public async Task<IActionResult> DesactivarUsuariosSinCuenta()
         {
             var usuariosSinCuenta = await _usuarioRepository.ObtenerUsuariosSinCuentaAsync();
 
             if (!usuariosSinCuenta.Any())
-                return NotFound("No hay usuarios sin cuentas para eliminar.");
+                return NotFound("No hay usuarios sin cuentas para desactivar.");
 
-            await _usuarioRepository.EliminarUsuariosAsync(usuariosSinCuenta);
+            await _usuarioRepository.DesactivarUsuariosAsync(usuariosSinCuenta);
 
             return Ok(new
             {
-                mensaje = $"{usuariosSinCuenta.Count} usuario(s) sin cuenta eliminados exitosamente.",
-                usuariosEliminados = usuariosSinCuenta.Select(u => new
+                mensaje = $"{usuariosSinCuenta.Count} usuario(s) desactivados exitosamente.",
+                usuariosDesactivados = usuariosSinCuenta.Select(u => new
                 {
                     u.nro_cliente,
                     u.nombre,
