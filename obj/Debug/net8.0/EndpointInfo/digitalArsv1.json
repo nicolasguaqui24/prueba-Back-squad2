@@ -6,49 +6,6 @@
     "version": "v1"
   },
   "paths": {
-    "/api/Auth/login": {
-      "post": {
-        "tags": [
-          "(SOLO ADMINISTRADOR)"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LoginRequest"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LoginRequest"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/LoginRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Auth/desactivar-usuarios-sin-cuenta": {
-      "put": {
-        "tags": [
-          "(SOLO ADMINISTRADOR)"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/Cuentas": {
       "get": {
         "tags": [
@@ -166,6 +123,49 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/Auth/login": {
+      "post": {
+        "tags": [
+          "Metodo con autenticacion.(SOLO ADMINISTRADOR)"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Auth/desactivar-usuarios-sin-cuenta": {
+      "put": {
+        "tags": [
+          "Metodo con autenticacion.(SOLO ADMINISTRADOR)"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }

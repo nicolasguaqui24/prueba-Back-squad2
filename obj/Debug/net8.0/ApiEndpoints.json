@@ -9,7 +9,7 @@
     "Parameters": [],
     "ReturnTypes": [],
     "Tags": [
-      "(SOLO ADMINISTRADOR)"
+      "Metodo con autenticacion.(SOLO ADMINISTRADOR)"
     ]
   },
   {
@@ -28,7 +28,7 @@
     ],
     "ReturnTypes": [],
     "Tags": [
-      "(SOLO ADMINISTRADOR)"
+      "Metodo con autenticacion.(SOLO ADMINISTRADOR)"
     ]
   },
   {

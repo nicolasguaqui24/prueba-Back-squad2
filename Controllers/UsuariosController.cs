@@ -36,6 +36,7 @@ public class UsuariosController : ControllerBase
     public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
     {
         await _usuarioRepository.AddAsync(usuario);
+        await _usuarioRepository.SaveAsync();
         return CreatedAtAction(nameof(GetUsuario), new { id = usuario.nro_cliente }, usuario);
     }
 
