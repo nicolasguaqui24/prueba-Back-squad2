@@ -1,14 +1,15 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "DigitalArs API",
+    "title": "BILLETERA VIRTUAL- DigitalArs",
+    "description": "Gestión de usuarios, cuentas, movimientos, permisos ",
     "version": "v1"
   },
   "paths": {
     "/api/Auth/login": {
       "post": {
         "tags": [
-          "Auth"
+          "(SOLO ADMINISTRADOR)"
         ],
         "requestBody": {
           "content": {
@@ -36,10 +37,10 @@
         }
       }
     },
-    "/api/Auth/eliminar-usuarios-sin-cuenta": {
-      "delete": {
+    "/api/Auth/desactivar-usuarios-sin-cuenta": {
+      "put": {
         "tags": [
-          "Auth"
+          "(SOLO ADMINISTRADOR)"
         ],
         "responses": {
           "200": {
@@ -169,10 +170,195 @@
         }
       }
     },
+    "/api/Movimientos": {
+      "get": {
+        "tags": [
+          "Movimientos"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Movimiento"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Movimiento"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Movimiento"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Movimientos"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MovimientoDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MovimientoDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/MovimientoDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Movimiento"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Movimiento"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Movimiento"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Movimientos/{id}": {
+      "get": {
+        "tags": [
+          "Movimientos"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Movimiento"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Movimiento"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Movimiento"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Movimientos"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Movimiento"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Movimiento"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Movimiento"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Movimientos"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Permiso/{nroUsuario}/tiene-permiso/{acceso}": {
       "get": {
         "tags": [
-          "Permiso"
+          "Permiso (SOLO ADMINISTRADOR)"
         ],
         "parameters": [
           {
@@ -220,7 +406,7 @@
     "/api/Permiso/{nroUsuario}": {
       "get": {
         "tags": [
-          "Permiso"
+          "Permiso (SOLO ADMINISTRADOR)"
         ],
         "parameters": [
           {
@@ -269,7 +455,7 @@
     "/api/Permiso": {
       "post": {
         "tags": [
-          "Permiso"
+          "Permiso (SOLO ADMINISTRADOR)"
         ],
         "requestBody": {
           "content": {
@@ -300,7 +486,7 @@
     "/api/Permiso/{nroUsuario}/{acceso}": {
       "delete": {
         "tags": [
-          "Permiso"
+          "Permiso (SOLO ADMINISTRADOR)"
         ],
         "parameters": [
           {
@@ -556,6 +742,34 @@
         },
         "additionalProperties": false
       },
+      "MovimientoDTO": {
+        "type": "object",
+        "properties": {
+          "fecha": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "monto": {
+            "type": "number",
+            "format": "double"
+          },
+          "nro_cuenta_orig": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nro_cuenta_dest": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "codigo_transaccion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "Permiso": {
         "type": "object",
         "properties": {
@@ -649,7 +863,7 @@
     "securitySchemes": {
       "Bearer": {
         "type": "http",
-        "description": "Ingrese el token JWT como: Bearer {su token}",
+        "description": "Ingrese el token ",
         "scheme": "Bearer",
         "bearerFormat": "JWT"
       }

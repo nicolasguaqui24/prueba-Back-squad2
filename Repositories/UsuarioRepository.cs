@@ -18,9 +18,13 @@ namespace digitalArsv1.Repositories
                 .ToListAsync();
         }
 
-        public async Task EliminarUsuariosAsync(List<Usuario> usuarios)
+        public async Task DesactivarUsuariosAsync(List<Usuario> usuarios)
         {
-            _context.Usuarios.RemoveRange(usuarios);
+            foreach (var usuario in usuarios)
+            {
+                usuario.estado = false;
+            }
+
             await _context.SaveChangesAsync();
         }
     }

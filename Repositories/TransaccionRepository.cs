@@ -12,7 +12,6 @@ public class TransaccionRepository : Repository<Transaccion>, ITransaccionReposi
     }
 
     
-
     public async Task UpdateAsync(Transaccion transaccion)
     {
         Update(transaccion);  

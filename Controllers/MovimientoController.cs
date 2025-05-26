@@ -15,14 +15,14 @@ public class MovimientosController : ControllerBase
     {
         _movimientoRepository = movimientoRepository;
     }
-   /* [HttpGet]
+    [HttpGet]  // Obtiene la lista de movimientos
     public async Task<ActionResult<IEnumerable<Movimiento>>> GetMovimientos()
     {
         var movimientos = await _movimientoRepository.GetAllWithRelationsAsync();
         return Ok(movimientos);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}")] // Busca un movimiento por su id (id_trx)
     public async Task<ActionResult<Movimiento>> GetMovimiento(int id)
     {
         var movimiento = await _movimientoRepository.GetByIdAsync(id);
@@ -31,8 +31,8 @@ public class MovimientosController : ControllerBase
 
         return Ok(movimiento);
     }
-
-    [HttpPost]
+   
+    [HttpPost]// Recibe un JSON(en la prueba del metodo), con los datos para crear un nuevo movimiento
     public async Task<ActionResult<Movimiento>> PostMovimiento(MovimientoDTO dto)
     {
         var movimiento = new Movimiento
@@ -49,7 +49,8 @@ public class MovimientosController : ControllerBase
         return CreatedAtAction(nameof(GetMovimiento), new { id = movimiento.id_trx }, movimiento);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id}")]// Actualiza un movimiento existente (primero valida que el id de la URL coincida con el id del objeto enviado)
+
     public async Task<IActionResult> PutMovimiento(int id, Movimiento movimiento)
     {
         if (id != movimiento.id_trx)
@@ -60,7 +61,7 @@ public class MovimientosController : ControllerBase
 
         return NoContent();
     }
-    [HttpDelete("{id}")]
+    [HttpDelete("{id}")] // Busca el movimiento por id
     public async Task<IActionResult> DeleteMovimiento(int id)
     {
         var movimiento = await _movimientoRepository.GetByIdAsync(id);
@@ -72,4 +73,4 @@ public class MovimientosController : ControllerBase
 
         return NoContent();
     }
-*/}
+}
