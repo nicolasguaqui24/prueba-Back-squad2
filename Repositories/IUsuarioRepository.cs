@@ -8,5 +8,8 @@ namespace digitalArsv1.Repositories
     {
         Task<List<Usuario>> ObtenerUsuariosSinCuentaAsync();
         Task DesactivarUsuariosAsync(List<Usuario> usuarios);
+        Task<Usuario> ObtenerPorEmailAsync(string email);
+        Task CrearAsync(Usuario usuario);
+       
     }
 }

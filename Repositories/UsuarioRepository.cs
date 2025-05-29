@@ -27,5 +27,18 @@ namespace digitalArsv1.Repositories
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Usuario> ObtenerPorEmailAsync(string mail)
+        {
+            return await _context.Usuarios.FirstOrDefaultAsync(u => u.mail == mail);
+        }
+        public async Task CrearAsync(Usuario usuario)
+        {
+            _context.Usuarios.Add(usuario);
+            await _context.SaveChangesAsync();
+
+
+        }
+
     }
 }

@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authorization;
+using digitalArsv1.DTOs;
+using digitalArsv1.Helpers;
 
 namespace digitalArsv1.Controllers
 {
@@ -29,39 +31,57 @@ namespace digitalArsv1.Controllers
         }
 
         [HttpPost("login")]
-
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginDTO login)
         {
-            // 1. Buscar usuario por nro_cliente
-            var usuario = await _usuarioRepository.GetByIdAsync(request.nro_usuario);
-            if (usuario == null || usuario.estado == false) // 0 = inactivo
-                return Unauthorized(new { mensaje = "Usuario no encontrado o inactivo" });
+            var usuario = await _usuarioRepository.ObtenerPorEmailAsync(login.mail);
+            if (usuario == null || !PasswordHelper.VerifyPassword(login.Password, usuario.password_hash))
+                return Unauthorized(new { mensaje = "Credenciales inválidas." });
 
-            // 2. Validar acceso según tipo_cliente y permisos
-            if (usuario.tipo_cliente == "ADMINISTRADOR")
-            {
-                // Verificar si tiene permiso 'ADMINISTRADOR' en tabla Permisos
-                bool tienePermiso = await _permisoRepository.ExistePermisoAsync(request.nro_usuario, "ADMINISTRADOR");
-                if (!tienePermiso)
-                    return Unauthorized(new { mensaje = "No tiene permiso ADMINISTRADOR" });
-            }
-            else if (usuario.tipo_cliente != "BILLETERA")
-            {
-                // Sólo permiten BILLETERA o ADMINISTRADOR, es decir si no es administrador sera BILLETERA
-                return Unauthorized(new { mensaje = "Tipo de cliente no autorizado" });
-            }
+            if (!usuario.estado)
+                return Unauthorized(new { mensaje = "El usuario está desactivado." });
 
-            // 3. Generar token JWT
             var token = GenerarToken(usuario.nro_cliente, usuario.tipo_cliente);
 
-            // 4. Responder con token y mensaje
             return Ok(new
             {
                 token,
-                mensaje = "Inicio de sesión ADMINISTRADOR exitoso",
-                tipo_cliente = usuario.tipo_cliente
+                usuario = new UsuarioDTO
+                {
+                    Id = usuario.nro_cliente,
+                    mail = usuario.mail,
+                    Nombre = usuario.nombre,
+                    tipo_cliente = usuario.tipo_cliente
+                }
             });
         }
+
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        {
+            // Validar duplicado
+            var existente = await _usuarioRepository.ObtenerPorEmailAsync(request.Mail);
+            if (existente != null)
+                return BadRequest(new { mensaje = "Ya existe un usuario con ese mail." });
+
+            var usuario = new Usuario
+            {
+                nombre = request.Nombre,
+                apellido = request.Apellido,
+                mail = request.Mail,
+                direccion = request.Direccion,
+                telefono = request.Telefono,
+                password_hash = PasswordHelper.HashPassword(request.Password),
+                tipo_cliente = request.Tipo_cliente,
+                estado = true
+            };
+
+            await _usuarioRepository.CrearAsync(usuario);
+            
+
+            return Ok(new { mensaje = "Usuario registrado correctamente." });
+        }
+
 
         // Método privado para generar JWT
         private string GenerarToken(int nroUsuario, string tipoCliente)
