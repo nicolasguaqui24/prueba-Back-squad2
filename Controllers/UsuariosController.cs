@@ -1,4 +1,5 @@
-﻿using digitalArsv1.Models;
+﻿using digitalArsv1.DTOs;
+using digitalArsv1.Models;
 using digitalArsv1.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -15,28 +16,46 @@ public class UsuariosController : ControllerBase
         _usuarioRepository = usuarioRepository;
     }
 
-    [HttpGet] //METODO GET
-    public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<UsuarioDTO>>> GetUsuarios()
     {
         var usuarios = await _usuarioRepository.GetAllAsync();
-        return Ok(usuarios);
+        var usuariosDto = usuarios.Select(u => new UsuarioDTO
+        {
+            Id = u.nro_cliente,
+            mail = u.mail,
+            Nombre = u.nombre,
+            tipo_cliente = u.tipo_cliente
+        });
+
+        return Ok(usuariosDto);
     }
 
-     [HttpGet("{id}")]//METODO GET por id
-    public async Task<ActionResult<Usuario>> GetUsuario(int id)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<UsuarioDTO>> GetUsuario(int id)
     {
         var usuario = await _usuarioRepository.GetByIdAsync(id);
         if (usuario == null)
             return NotFound();
 
-        return Ok(usuario);
+        var usuarioDto = new UsuarioDTO
+        {
+            Id = usuario.nro_cliente,
+            mail = usuario.mail,
+            Nombre = usuario.nombre,
+            tipo_cliente = usuario.tipo_cliente
+        };
+
+        return Ok(usuarioDto);
     }
-    
+
     [HttpPost]//METODO POST
     public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
     {
-        await _usuarioRepository.AddAsync(usuario);
+        await _usuarioRepository.CrearAsync(usuario);
+        await _usuarioRepository.SaveAsync();
         return CreatedAtAction(nameof(GetUsuario), new { id = usuario.nro_cliente }, usuario);
+        
     }
 
    /* [HttpPut("{id}")]

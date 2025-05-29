@@ -9,7 +9,7 @@
     "Parameters": [],
     "ReturnTypes": [],
     "Tags": [
-      "(SOLO ADMINISTRADOR)"
+      "Metodo con autenticacion.(SOLO ADMINISTRADOR)"
     ]
   },
   {
@@ -21,14 +21,33 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "request",
-        "Type": "digitalArsv1.Models.LoginRequest",
+        "Name": "login",
+        "Type": "digitalArsv1.DTOs.LoginDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [],
     "Tags": [
-      "(SOLO ADMINISTRADOR)"
+      "Metodo con autenticacion.(SOLO ADMINISTRADOR)"
+    ]
+  },
+  {
+    "ContainingType": "digitalArsv1.Controllers.AuthController",
+    "Method": "Register",
+    "RelativePath": "api/Auth/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "digitalArsv1.DTOs.RegisterRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [],
+    "Tags": [
+      "Metodo con autenticacion.(SOLO ADMINISTRADOR)"
     ]
   },
   {
@@ -328,7 +347,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[Usuario, digitalArsv1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[digitalArsv1.DTOs.UsuarioDTO, digitalArsv1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -380,7 +399,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "Usuario",
+        "Type": "digitalArsv1.DTOs.UsuarioDTO",
         "MediaTypes": [
           "text/plain",
           "application/json",

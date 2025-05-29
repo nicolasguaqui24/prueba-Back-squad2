@@ -13,6 +13,7 @@ public class Usuario
     public bool estado { get; set; }
     public string tipo_cliente { get; set; }
     public string telefono { get; set; }
+    public string password_hash { get; set; }
 
     // Relación 1:N con Cuenta
     public ICollection<Cuenta> Cuentas { get; set; } = new List<Cuenta>();
